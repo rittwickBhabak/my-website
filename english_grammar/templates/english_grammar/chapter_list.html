@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block page_title %}English Grammar{% endblock page_title %}
+
+{% block page_style %}
+<style>
+h3>a{
+    text-decoration: none;
+}
+</style>
+{% endblock page_style %}
+
+{% block page_content %}
+
+    <div class="container mt-3 mb-5">
+    {% for chapter in chapter_list %}
+        
+        <div class="row">
+            <h3><a href="{% url 'english_grammar:chapter-detail' chapter.pk %}">Chapter {{chapter.slno|title}} : {{chapter.title|title}}</a></h3>
+        </div>
+    {% endfor %}
+    </div>
+
+{% endblock page_content %}
+
+
+{% block page_script %}
+<script>
+
+</script>
+{% endblock page_script %}

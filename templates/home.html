@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block page_title %}I am Rittwick Bhabak{% endblock page_title %}
+
+
+{% block page_content %}
+<div class="container my-3 mb-5">
+    <p class="px-0">
+        <a class="btn btn-primary" href="{% url 'restaurants:add-restaurant' %}">Add New Restaurant</a>
+    </p>
+</div>
+
+{% endblock page_content %}

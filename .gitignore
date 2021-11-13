@@ -1,0 +1,7 @@
+.vscode/*
+env/*
+*.pdf
+images/*
+*.jpg
+chapters.txt
+pdftoimage.py

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block page_title %}All Restaurants | Restaurants {% endblock page_title %}
+
+{% block page_style %}
+<style>
+.heading>a{
+    text-decoration: none;
+}
+</style>
+{% endblock page_style %}
+
+{% block page_content %}
+
+    <div class="container my-3">
+        <p class="px-0">
+            <a class="btn btn-primary" href="{% url 'restaurants:add-restaurant' %}">Add New Restaurant</a>
+        </p>
+        {% for restaurant in restaurant_list %}
+            
+            <div class="row border mb-3 p-3">
+                <div class="heading"><a class="fs-3" href="{% url 'restaurants:restaurant-detail' restaurant.pk %}">{{restaurant.title}}</a> <i class="fa fa-map-marker" aria-hidden="true"></i> at <small class="small">{{restaurant.location}}</small></div>
+                <p>
+                    {{restaurant.description|safe|linebreaks}}
+                </p>
+                {% comment %} <p>
+                    Location: {{restaurant.location}}
+                </p> {% endcomment %}
+            </div>
+        {% endfor %}
+    
+    </div>
+
+{% endblock page_content %}
+
+
+{% block page_script %}
+<script>
+
+</script>
+{% endblock page_script %}

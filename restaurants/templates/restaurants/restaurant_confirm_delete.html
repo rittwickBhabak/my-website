@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Add New Restaurant | Restaurant {% endblock page_title %}
+
+{% block page_style %}
+<style>
+
+</style>
+{% endblock page_style %}
+
+{% block page_content %}
+<div class="container my-5">
+    <h1>Confirm Delete {{restaurant.title}} ?</h1>
+    <div class="container">
+        {{restaurant.description|safe|linebreaks}}
+        <p>Location: {{restaurant.location}}</p>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Delete" class='btn btn-danger'>
+        <a href="{% url 'restaurants:restaurant-detail' restaurant.pk %}" class="btn btn-primary">Cancel</a>
+    </form>
+</div>
+{% endblock page_content %}
+
+
+{% block page_script %}
+<script>
+
+</script>
+{% endblock page_script %}

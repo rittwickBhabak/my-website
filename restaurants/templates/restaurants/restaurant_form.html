@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Add New Restaurant | Restaurant {% endblock page_title %}
+
+{% block page_style %}
+<style>
+
+</style>
+{% endblock page_style %}
+
+{% block page_content %}
+<div class="container">
+    {% if form.instance.pk %}
+    <h1>Update {{form.instance.title}}</h1>
+    {% else %}
+    <h1>Add New Restaurant</h1>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Save" class='btn btn-primary'>
+    </form>
+</div>
+{% endblock page_content %}
+
+
+{% block page_script %}
+<script>
+
+</script>
+{% endblock page_script %}
