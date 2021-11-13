@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block page_title %}All Books | Library  {% endblock page_title %}
+
+{% block page_content %}
+<div class="container m-3 mx-auto row">
+    {% for book in book_list %}
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+            {% include 'library/includes/book-card.html' with book=book %}
+        </div>
+    {% endfor %}
+    <a href="{% url 'library:create' %}" class="btn btn-primary my-5">Add New Book</a>
+</div>
+
+
+{% endblock page_content %}

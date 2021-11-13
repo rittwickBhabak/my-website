@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+{% if form.instance.pk %}
+Update Book 
+{% else %}
+Create Book 
+{% endif %}
+
+{% endblock page_title %}
+
+{% block page_content %}
+<div class="container  m-5 d-block m-auto mt-5">
+    <h1 class="">
+        {% if form.instance.pk %}
+        Update {{form.instance.title}}
+        {% else %}
+        Add New Book
+        {% endif %}
+    </h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        {% if form.instance.pk %}
+        <div class="w-100 d-flex flex-row justify-content-between">
+            <input type="submit" class="btn btn-warning" value="Update Book">
+            <a href="{% url 'library:delete' book.pk %}" class="btn btn-danger">Delete</a>
+        </div>
+        <br>
+        <a href="{% url 'library:detail' book.pk book.last_accessed_page %}">Cancel</a>
+        {% else %}
+        <input type="submit" class="btn btn-secondary" value="Add Book">
+        {% endif %}
+    </form>
+</div>
+{% endblock page_content %}
