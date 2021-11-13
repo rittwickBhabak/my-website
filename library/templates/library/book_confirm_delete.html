@@ -1,0 +1,17 @@
+{% extends 'library/base.html' %}
+
+{% block page_title %} Delete {{book.title}} {% endblock page_title %}
+
+{% block page_content %}
+<div class="container m-auto mt-5">
+    <h1 class="text-white">Confirm Delete</h1>
+    <h2 class="text-white">Delete <i>{{book.title}}</i> ?</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" class="btn btn-danger" value="Delete">
+        <a href="{% url 'library:list' %}" class="btn btn-primary">Cancel</a>
+    </form>
+</div>
+
+{% endblock page_content %}

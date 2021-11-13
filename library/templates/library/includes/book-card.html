@@ -1,0 +1,16 @@
+<div class="card m-3 mx-auto" style="width: 18rem;">
+  <img src="{{book.cover_page_url}}" style="display: block;margin:auto;width: auto;height: 300px;" class="card-img-top" alt="{{book.title}}">
+  <div class="card-body">
+    <h5 class="card-title">{{ book.title}} </h5>
+    <p class="card-text text-end">
+      {% if book.author %}
+        By {{book.author}}
+      {% endif %}
+    </p>
+    <a href="{% url 'library:detail' book.pk book.last_accessed_page %}" class="btn btn-primary">
+      Read Now
+      <i class="bi bi-book"></i>
+    </a>
+    <a href="{% url 'library:update' book.pk %}" class="btn btn-sm btn-outline-warning float-end">Update</a>
+  </div>
+</div>
