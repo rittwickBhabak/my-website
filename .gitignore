@@ -7,3 +7,5 @@ chapters.txt
 pdftoimage.py
 */*/*.pyc
 *.cpython-37.pyc
+mysite/__pycache__/settings.cpython-37.pyc
+mysite/__pycache__/urls.cpython-37.pyc
