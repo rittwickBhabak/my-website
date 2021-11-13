@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Add New Post | Tech Blog{% endblock page_title %}
+
+{% block page_style %}
+<style>
+
+</style>
+{% endblock page_style %}
+
+{% block page_content %}
+<div class="container">
+    <h1>Delete <u>{{post.title}}</u> ? </h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Delete" class="btn btn-danger">
+        <a href="{% url 'tech_blog:post-detail' post.pk %}" class="btn btn-primary">Cancel</a>
+    </form>
+</div>
+{% endblock page_content %}
+
+
+{% block page_script %}
+<script>
+
+</script>
+{% endblock page_script %}
