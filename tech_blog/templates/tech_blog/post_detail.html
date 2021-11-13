@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Tech Blog{% endblock page_title %}
+
+{% block page_style %}
+<style>
+
+</style>
+{% endblock page_style %}
+
+{% block page_content %}
+<div class="container mb-5">
+    <h1>{{post.title}}</h1>
+    <div class="border p-3">
+        {{post.text|safe|linebreaks}}
+    </div>
+    <div class="my-3">
+        <a href="{% url 'tech_blog:post-edit' post.pk %}" class="btn btn-warning">Update</a>
+        <a href="{% url 'tech_blog:post-delete' post.pk %}" class="btn btn-danger">Delete Post</a>
+        <a href="{% url 'tech_blog:post-list' %}" class="btn btn-primary">All Posts</a>
+    </div>
+</div>
+{% endblock page_content %}
+
+
+{% block page_script %}
+<script>
+
+</script>
+{% endblock page_script %}

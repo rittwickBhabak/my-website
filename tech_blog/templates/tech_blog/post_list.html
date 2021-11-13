@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Tech Blog{% endblock page_title %}
+
+{% block page_style %}
+<style>
+.no-underline{
+    text-decoration: none;
+}
+
+</style>
+{% endblock page_style %}
+
+{% block page_content %}
+<div class="container">
+    <a href="{% url 'tech_blog:post-add' %}" class="btn btn-primary my-3">Add New Post</a>
+    {% for post in post_list %}
+    <div class="border-bottom p-3">
+        <h3><a class="no-underline" href="{% url 'tech_blog:post-detail' post.pk %}">{{post.title}}</a></h3>
+    </div>
+    {% endfor %}
+</div>
+{% endblock page_content %}
+
+
+{% block page_script %}
+<script>
+
+</script>
+{% endblock page_script %}

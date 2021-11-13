@@ -7,5 +7,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('english_grammar/', include('english_grammar.urls')),
     path('restaurants/', include('restaurants.urls')),
+    path('tech-blog/', include('tech_blog.urls')),
     # path('users/', include('app_users.urls')),
 ]
