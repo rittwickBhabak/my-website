@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'english_grammar',
     'restaurants',
+    'tech_blog',
     'app_users',
 ]
 

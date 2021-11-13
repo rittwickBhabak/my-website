@@ -5,3 +5,5 @@ images/*
 *.jpg
 chapters.txt
 pdftoimage.py
+*/*/*.pyc
+*.cpython-37.pyc
