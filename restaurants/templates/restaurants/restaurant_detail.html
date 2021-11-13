@@ -22,6 +22,7 @@ h1>a, .no-underline{
             <a class="d-inline m-3 no-underline" href="{% url 'restaurants:edit-restaurant' restaurant.pk %}"><i class="bi bi-pen"></i> &nbsp; Edit</a>
             <a class="d-inline m-3 no-underline" href="{% url 'restaurants:delete-restaurant' restaurant.pk %}"><i class="bi bi-trash"></i> &nbsp; Delete</a>
             <a class="d-inline m-3 no-underline" href="{% url 'restaurants:restaurant-list' %}"><i class="bi bi-list-ul"></i> All Restaurants</a>
+            <a class="d-inline m-3 no-underline" href="https://www.google.com/search?q={{restaurant.title}}" target="_blank"><i class="bi bi-google"></i> Google it</a>
         </div>
     </div>
 

@@ -9,7 +9,15 @@
 {% endblock page_style %}
 
 {% block page_content %}
-
+<div class="container">
+    <h1>Chapter {{chapter.slno}} : {{chapter.title|title}}</h1>
+    <div>
+        <p class="lead">Total pages: {{chapter.total_pages}}</p>
+        <a href="{% url 'english_grammar:page-detail' chapter.pk 1 %}" class="btn btn-primary">Read Now</a>
+        <a href="{% url 'english_grammar:edit-chapter' chapter.pk %}" class="btn btn-primary">Edit Chapter</a>
+        <a href="{% url 'english_grammar:chapter-list' %}" class="btn btn-primary">All Chapters</a>
+    </div>
+</div>
 {% endblock page_content %}
 
 
