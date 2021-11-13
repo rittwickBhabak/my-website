@@ -5,18 +5,20 @@
 
 {% block page_content %}
 
-<h1>Confirm Delete This Dirty Talk ?</h1>
-<div class="text-white">
-    {{dirtytalk.text|safe|linebreaks}}
+<div class="container mt-3 mb-5">
+    <h1>Confirm Delete This Dirty Talk ?</h1>
+    <div class="">
+        {{dirtytalk.text|safe|linebreaks}}
+    </div>
+
+    <br>
+    <form method='POST'>
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Delete" class="btn btn-danger">
+        <a href="{% url 'choti_golpo:talk-list' %}" class="btn btn-primary">Cancel</a>
+    </form>
+
 </div>
-
-<br>
-<form method='POST'>
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="Delete" class="btn btn-danger">
-    <a href="{% url 'talk-list' %}" class="btn btn-primary">Cancel</a>
-</form>
-
 
 {% endblock page_content %}

@@ -17,7 +17,7 @@ class StoryDetail(DetailView):
 
 class DeleteStory(DeleteView):
     model = Story 
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('choti_golpo:index')
 
 class UpdateStory(UpdateView):
     fields = ('title', 'text')
@@ -33,7 +33,7 @@ class DirtyTalkList(ListView):
 
 class DeleteTalkView(DeleteView):
     model = DirtyTalk
-    success_url = reverse_lazy('talk-list')
+    success_url = reverse_lazy('choti_golpo:talk-list')
 
 def add_dirty_talk(request):
     if request.method == 'POST':
@@ -50,23 +50,7 @@ def add_dirty_talk(request):
             return JsonResponse({"status": "success"})
 
 
-def logout_view(request):
-    logout(request)
-    return redirect(reverse('index'))
 
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect(reverse('index'))
-        else:
-            messages.error(request, 'User does not exist')
-            return redirect(reverse('login'))
-    else:
-        return render(request, 'myapp/login.html')
 
 
 def upload_online(request):
@@ -86,7 +70,7 @@ def story_completed(request):
         story.save()
         success_message = f"Congratulations! {story.title} Completed."
         messages.success(request, success_message)
-        return redirect(reverse('index'))
+        return redirect(reverse('choti_golpo:index'))
         
 
 def edit_talk(request):

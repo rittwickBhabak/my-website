@@ -1,28 +1,30 @@
-{% extends 'myapp/base.html' %}
+{% extends 'base.html' %}
 
 {% block page_title %} {{story.title}} {% endblock page_title %}
 
 {% block page_content %}
 
+<div class="container mt-2 mb-5">
+
 <div class="d-flex flex-row justify-content-between align-items-center">
-    <span class="text-white fs-1">{{story.title}} {% if story.is_read %}<i class="bi bi-check"></i>{% endif %}</span>
+    <span class="  fs-1">{{story.title}} {% if story.is_read %}<i class="bi bi-check"></i>{% endif %}</span>
     {% if user.is_authenticated %}
     <span>
         <div class="btn-group" role="group">
             <button id="" type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
             <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'update-story' story.id %}">Update</a></li>
-            <li><a class="dropdown-item" href="{% url 'delete-story' story.id %}">Delete</a></li>
+            <li><a class="dropdown-item" href="{% url 'choti_golpo:update-story' story.id %}">Update</a></li>
+            <li><a class="dropdown-item" href="{% url 'choti_golpo:delete-story' story.id %}">Delete</a></li>
             </ul>
         </div>
     </span>
     {% endif %}
 </div>
-<div class="text-white fs-5" id="story-text">
+<div class="text-dark fs-5" id="story-text">
     {{story.text|safe|linebreaks}}
 </div>
 
-<form method="POST" action="{% url 'story-completed' %}">
+<form method="POST" action="{% url 'choti_golpo:story-completed' %}">
     {% csrf_token %}    
     <input type="number" name="s_id" value="{{story.id}}" hidden>
     <input value="Story Completed" type="submit" class="btn btn-secondary">
@@ -34,6 +36,8 @@
   <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
 </svg>
 </div>
+</div>
+
 {% endblock page_content %}
 
 
@@ -56,7 +60,7 @@ function add_talk_n_height(talk, last_height, s_id){
     data.append("s_id", s_id)
     data.append("csrfmiddlewaretoken", '{{csrf_token}}')
 
-    axios.post('{% url "add-talk" %}', data)
+    axios.post('{% url "choti_golpo:add-talk" %}', data)
     .then(res => {
         let msg = document.querySelector('#talk-added')
         msg.classList.remove('d-none')

@@ -9,5 +9,7 @@ urlpatterns = [
     path('restaurants/', include('restaurants.urls')),
     path('tech-blog/', include('tech_blog.urls')),
     path('choti-golpo/', include('choti_golpo.urls')),
+    path('logout', views.logout_view, name='logout'),
+    path('login', views.login_view, name='login'),
     # path('users/', include('app_users.urls')),
 ]

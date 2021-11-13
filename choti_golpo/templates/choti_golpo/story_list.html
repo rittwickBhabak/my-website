@@ -1,16 +1,20 @@
 {% extends 'base.html' %}
 
-{% block page_title %} All Stories {% endblock page_title %}
+{% block page_title %} All Stories | Choti Golpo {% endblock page_title %}
 
 {% block page_content %}
-
-
+<div class="container mt-2 mb-5">
+    <div class="my-3">
+        <a href="{% url 'choti_golpo:talk-list' %}" class="btn btn-primary">Talk List</a>
+        <a href="{% url 'choti_golpo:create-story' %}" class="btn btn-primary">Add New Story</a>
+    </div>
     {% for story in story_list %}
         <h3 class=" position-relative">
             <span class="text-success position-absolute top-0 start-0 translate-middle p-2">{% if story.is_read %}<i class="bi bi-check"></i>{% endif %}</span>
-            <a class="story-link" href="{% url 'detail-page' story.id %}">{{story.title}}</a>
+            <a class="text-dark" href="{% url 'choti_golpo:detail-page' story.id %}">{{story.title}}</a>
         </h3>
         <hr>
     {% endfor %}
 
+</div>
 {% endblock page_content %}

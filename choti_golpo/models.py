@@ -8,7 +8,7 @@ class Story(models.Model):
     is_read = models.BooleanField(default=False)
 
     def get_absolute_url(self):
-        return reverse('detail-page', kwargs={"pk": self.pk})
+        return reverse('choti_golpo:detail-page', kwargs={"pk": self.pk})
     
     def __str__(self):
         return self.title 
