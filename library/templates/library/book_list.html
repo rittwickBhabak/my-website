@@ -8,6 +8,8 @@
             {% include 'library/includes/book-card.html' with book=book %}
         </div>
     {% endfor %}
+    <a href="{% url 'library:create' %}" class="btn btn-primary my-5">Add New Book</a>
 </div>
+
 
 {% endblock page_content %}

@@ -1,4 +1,4 @@
-{% extends 'library/base.html' %}
+{% extends 'base.html' %}
 
 {% block page_title %}
 {% if form.instance.pk %}
@@ -10,8 +10,8 @@ Create Book
 {% endblock page_title %}
 
 {% block page_content %}
-<div class="container text-white m-5 d-block m-auto mt-5">
-    <h1 class="text-white">
+<div class="container  m-5 d-block m-auto mt-5">
+    <h1 class="">
         {% if form.instance.pk %}
         Update {{form.instance.title}}
         {% else %}
