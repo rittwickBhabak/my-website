@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'english_grammar',
     'restaurants',
     'tech_blog',
+    'choti_golpo',
     'app_users',
 ]
 

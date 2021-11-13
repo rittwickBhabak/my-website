@@ -1,0 +1,110 @@
+{% extends 'myapp/base.html' %}
+
+{% block page_title %} Dirty Talks {% endblock page_title %}
+
+{% block page_content %}
+
+    {% for talk in dirtytalk_list %}
+        <div class="text-white border-bottom py-3 row">
+            <div class="col-11" id="talk-{{talk.id}}">
+                {{talk.text|safe|linebreaks}}
+            </div>
+            {% if user.is_authenticated %}
+            <div class="col-11 d-none edit-talk-form-div" id="edit-talk-form-div-{{talk.id}}">
+                <form class="edit-talk-form" data-talkid="{{talk.id}}" method="POST">
+                    <textarea class="form-control" name="talk_id">{{talk.text}}</textarea>
+                    <input type="submit" value="Save" class="btn btn-secondary">
+                </form>
+            </div>
+            {% endif %}
+            <div class="col-1 text-end">
+                {% if user.is_authenticated %}
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn text-white btn-sm rounded-circle text-center" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></button>
+                    <ul class="dropdown-menu">
+                    <li><button class="dropdown-item edit-talk-btn" data-talkid="{{talk.id}}">Edit <i class="bi bi-pencil-fill float-end"></i></button></li>
+                    <li><a class="dropdown-item" href="{% url 'delete-talk' talk.id %}">Delete <i class="bi bi-trash float-end"></i></a></li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+
+
+    <!-- Pagination start -->
+    <nav aria-label="Page navigation example" class="my-5 text-white bg-dark">
+        <ul class="pagination justify-content-center">
+            {% comment %} <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+            </li> {% endcomment %}
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link  text-white bg-dark" href="?page=1">&laquo; first</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link  text-white bg-dark" href="?page={{ page_obj.previous_page_number }}">previous</a>
+            </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link  text-white bg-dark" href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+            </li>
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link  text-white bg-dark" href="?page={{ page_obj.next_page_number }}">next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link  text-white bg-dark" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <!-- Pagination end -->
+{% endblock page_content %}
+
+
+{% block page_script %}
+<script>
+
+{% if user.is_authenticated %}
+function edit_talk(talk_id, text, form){
+    let data = new FormData();
+    data.append("talk_id", talk_id)
+    data.append("text", text)
+    data.append("csrfmiddlewaretoken", '{{csrf_token}}')
+
+    axios.post('{% url "edit-talk" %}', data)
+    .then(res => {
+        let parent = form.parentNode
+        parent.classList.add('d-none')
+        // alert('Dirty Talk updated successfully.')
+        let talk = document.querySelector(`#talk-${form.dataset.talkid}`)
+        talk.textContent = res.data.text
+    })
+    .catch(errors => alert('Failed to update the talk.' + errors))
+
+}
+let forms = document.querySelectorAll('.edit-talk-form')
+let editTalkBtns = document.querySelectorAll('.edit-talk-btn')
+editTalkBtns.forEach(btn => {
+    btn.addEventListener('click', e=>{
+        let form = document.querySelector(`#edit-talk-form-div-${e.target.dataset.talkid}`)
+        form.classList.remove('d-none')
+    })
+})
+
+forms.forEach(form => {
+    form.addEventListener('submit', (e)=>{
+        e.preventDefault()
+        let talkid = e.target.dataset.talkid 
+        let textarea = e.target.querySelector('textarea')
+        let text = textarea.value 
+        edit_talk(talkid, text, form)
+    })
+})
+{% endif %}
+
+</script>
+
+{% endblock page_script %}

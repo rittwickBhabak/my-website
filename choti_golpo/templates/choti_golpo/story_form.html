@@ -1,0 +1,22 @@
+{% extends 'myapp/base.html' %}
+
+{% block page_title %} All Stories {% endblock page_title %}
+
+{% block page_content %}
+
+{% if form.instance.pk %}
+<h1>Update {{form.instance.title}}</h1>
+{% else %}
+<h1>Add New Story</h1>
+{% endif %}
+<form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    {% if form.instance.pk %}
+        <input type="submit" class="btn btn-primary" value="Update">
+    {% else %}
+        <input type="submit" class="btn btn-primary" value="Save">
+    {% endif %}
+</form>
+
+{% endblock page_content %}

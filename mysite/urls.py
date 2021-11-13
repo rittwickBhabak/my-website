@@ -8,5 +8,6 @@ urlpatterns = [
     path('english_grammar/', include('english_grammar.urls')),
     path('restaurants/', include('restaurants.urls')),
     path('tech-blog/', include('tech_blog.urls')),
+    path('choti-golpo/', include('choti_golpo.urls')),
     # path('users/', include('app_users.urls')),
 ]

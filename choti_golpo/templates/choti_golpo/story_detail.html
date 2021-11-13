@@ -1,0 +1,83 @@
+{% extends 'myapp/base.html' %}
+
+{% block page_title %} {{story.title}} {% endblock page_title %}
+
+{% block page_content %}
+
+<div class="d-flex flex-row justify-content-between align-items-center">
+    <span class="text-white fs-1">{{story.title}} {% if story.is_read %}<i class="bi bi-check"></i>{% endif %}</span>
+    {% if user.is_authenticated %}
+    <span>
+        <div class="btn-group" role="group">
+            <button id="" type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
+            <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'update-story' story.id %}">Update</a></li>
+            <li><a class="dropdown-item" href="{% url 'delete-story' story.id %}">Delete</a></li>
+            </ul>
+        </div>
+    </span>
+    {% endif %}
+</div>
+<div class="text-white fs-5" id="story-text">
+    {{story.text|safe|linebreaks}}
+</div>
+
+<form method="POST" action="{% url 'story-completed' %}">
+    {% csrf_token %}    
+    <input type="number" name="s_id" value="{{story.id}}" hidden>
+    <input value="Story Completed" type="submit" class="btn btn-secondary">
+</form>
+
+<div class="position-fixed d-none bottom-0 end-0 m-5" id="talk-added">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+</svg>
+</div>
+{% endblock page_content %}
+
+
+{% block page_script %}
+
+<script>
+
+window.onload = () => {
+    document.documentElement.scrollTop = parseFloat('{{story.last_height}}')
+}
+
+{% if user.is_superuser %}
+
+function add_talk_n_height(talk, last_height, s_id){
+
+    let data = new FormData();
+
+    data.append("talk", talk)
+    data.append("last_height", last_height)
+    data.append("s_id", s_id)
+    data.append("csrfmiddlewaretoken", '{{csrf_token}}')
+
+    axios.post('{% url "add-talk" %}', data)
+    .then(res => {
+        let msg = document.querySelector('#talk-added')
+        msg.classList.remove('d-none')
+        setTimeout(()=>{
+            msg.classList.add('d-none')
+        }, 2 * 1000)
+    })
+    .catch(errors => console.log(errors))
+
+}
+
+var story_text = document.querySelector('#story-text')
+story_text.addEventListener('click', ()=>{
+    console.log('selected')
+    var last_height = document.documentElement.scrollTop
+    var text = window.getSelection().toString()
+    var s_id = '{{story.id}}'
+    add_talk_n_height(text, last_height, s_id)
+})
+{% endif %}
+
+</script>
+
+{% endblock page_script %}
