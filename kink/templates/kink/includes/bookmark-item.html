@@ -1,0 +1,11 @@
+{% load custom_tags %}
+<div class="row border-bottom py-1 bookmark-item">
+    <div class="col-3 lead text-center border-end d-flex align-items-center justify-content-center time-stamps">
+        <span class="time-stamps-text">{{bookmark.time|format_time}}</span>
+    </div>
+    <div class="col-9 lead">
+        {{bookmark.text}}
+        &nbsp;
+        <a href="/admin/kink/bookmark/{{bookmark.id}}/change/" target="_blank"><i class="fa fa-pencil text-danger edit-bookmark-btn" aria-hidden="true"></i></a>
+    </div>
+</div>

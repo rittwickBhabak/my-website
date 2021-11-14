@@ -1,0 +1,419 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block page_title %}{{video.title}}{% endblock page_title %}
+{% block page_style %}
+<style>
+    video {
+        width: 100%;
+    }
+
+    .time-stamps {
+        cursor: pointer;
+    }
+
+    .time-stamps:hover {
+        text-decoration: underline;
+    }
+
+    .edit-bookmark-btn {
+        cursor: pointer;
+    }
+
+    #bookmark-notes {
+        border: none;
+        border-bottom: 1px solid #000;
+        border-radius: 0px;
+    }
+
+    #bookmark-notes:active,
+    #bookmark-notes:focus {
+        /* outline: none !important; */
+        box-shadow: none;
+    }
+
+    .form-control:active,
+    .form-control:focus,
+    .btn:active,
+    .btn:focus,
+    .form-check-label:active,
+    .form-check-label:focus {
+        box-shadow: none;
+    }
+
+    #bookmark-list {
+        max-height: 400px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .text-success.revolve,
+    .text-danger.revolve {
+        transform: rotate(180deg);
+        transition: transform 2s ease;
+    }
+</style>
+{% endblock page_style %}
+{% block page_content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-sm-12 mb-2">
+
+            <video src="{{video.raw_link}}" controls></video>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-row align-items-center">
+                    {% if prev %}
+                    <a href="{% url 'kink:video-page' prev.id %}" class="mr-1 btn btn-danger btn-sm"><i
+                            class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Prev</a>
+                    {% else %}
+                    <div></div>
+                    {% endif %}
+                    <div class="form-check form-switch mx-3">
+                        <label class="form-check-label   small" for="update-last-seen">
+                            Update Last Seen?
+                        </label>
+                        <input class="form-check-input bg-danger" type="checkbox" id="update-last-seen" checked>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-row flex-end justify-content-end">
+                    <button class=" btn btn-danger mx-1 btn-sm" type="button" data-bs-toggle="modal"
+                        id="settings-modal-toggler" data-bs-target="#settings-modal"><i class="fa fa-cog"
+                            aria-hidden="true"></i></button>
+                    <select class="btn btn-sm btn-danger mx-1" id="playback-speed">
+                        <option value="1" selected>1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                    </select>
+                    {% if next %}
+                    <a href="{% url 'kink:video-page' next.id %}" class="ml-1 btn btn-danger btn-sm">Next &nbsp;<i
+                            class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                    {% else %}
+                    <div></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12   mb-2">
+            <h3>{{video.title}}</h3>
+            <form class="mb-3 clearfix" id="bookmark-add-from">
+                <label for="bookmark-notes" class="form-label lead">
+                    Add Bookmark at
+                    <span id="current-time">--:--</span>
+                </label>
+                <textarea class="form-control" id="bookmark-notes" rows="1"
+                    placeholder="Add New Point"></textarea>
+                <input type="submit" class="float-end btn btn-danger btn-sm mt-3" value="Add">
+            </form>
+            <div class="" id="bookmarks-section" style="overflow: hidden;">
+                <h5>
+                    Bookmarks
+                </h5>
+                <div id="bookmark-list">
+                    {% for bookmark in video.bookmark_set.all|order_bkmrks %}
+                    <div class="">
+                        {% include 'kink/includes/bookmark-item.html' with bookmark=bookmark %}
+                    </div>
+                    {% empty %}
+                    <p class="lead">No bookmarks available for this video</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LAST SEEN UPDATED LOGO -->
+    <div style="position: fixed; bottom: 10px; right: 10px;" id="last-seen-update" class="revolve">
+        <i class="fa fa-hourglass-start" aria-hidden="true"></i>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="settings-modal" tabindex="-1" aria-labelledby="settings-modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="settings-modalLabel">
+                        Links &nbsp; &nbsp;
+                        <span class="text-success small" id="success-message"></span>
+                        <span class="text-danger small" id="fail-message"></span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="mb-3">
+
+                        <label for="mf_link mb-1">Mediafire Page Link</label>
+                        <form class="" id="mf_form">
+                            <input type="text" id="mf_link" name="mf_link" class="form-control" {% if video.mf_link %}
+                                value="{{video.mf_link}}" {% else %} placeholder="Enter Mediafire Page Link" {% endif %}
+                                aria-label="Recipient's username with two button addons">
+                            <a href="{{video.mf_link}}" target="_blank" class="btn btn-outline-danger" type="button"><i
+                                    class="fa fa-external-link" aria-hidden="true"></i></a>
+                            <button class="btn btn-outline-danger" type="submit">Update</button>
+                        </form>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="mf_link mb-1">Raw Source Link</label>
+                        <form class="" id="raw_form">
+                            <input type="text" id="raw_link" name="raw_link" class="form-control" {% if video.raw_link %}
+                                value="{{video.raw_link}}" {% else %} placeholder="Enter Raw Source Link" {% endif %}
+                                aria-label="Recipient's username with two button addons">
+                                {% comment %} <br> {% endcomment %}
+                            <a href="{{video.raw_link}}" target="_blank" class="btn btn-outline-danger" type="button"><i
+                                    class="fa fa-download" aria-hidden="true"></i> Video</a>
+                            <button class="btn btn-outline-danger" type="submit">Update</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="/admin/kink/video/{{video.id}}/change/" target="_blank" class="btn btn-outline-danger">Edit
+                            Admin
+                        </a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- AXIOS LINK -->
+
+{% endblock page_content %}
+
+{% block page_script %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
+<script>
+    // CHANGING PLAYBACK SPEED
+    const playBackSpeedCtrl = document.querySelector('#playback-speed')
+    playBackSpeedCtrl.addEventListener('change', e => {
+        const value = e.target.value
+        document.querySelector('video').playbackRate = value
+    })
+
+    // ON VIDEO ERROR OPNE THE MF LINK AUTOMATICALLY
+    {
+        const mf_link = document.querySelector('#mf_link')
+        const raw_link = document.querySelector('#raw_link')
+        const video = document.querySelector('video')
+        const modalTriggerBtn = document.querySelector('#settings-modal-toggler')
+        video.addEventListener('error', () => {
+            if (mf_link.value) {
+                window.open(mf_link.value)
+                modalTriggerBtn.click()
+                raw_link.value = ''
+            } else {
+                modalTriggerBtn.click()
+            }
+        })
+    }
+
+    // SUBMISSION FUNCTION
+    const submit = (endPoint, dataList, onSuccess, onFail, successArgs, failArgs) => {
+        let data = new FormData();
+
+        dataList.forEach(d => {
+            data.append(d[0], d[1])
+        })
+        // data.append("csrfmiddlewaretoken", '{{csrf_token}}')
+
+        axios.post(endPoint, data)
+            .then(res => {
+                if (res.data['status'] == 'success') {
+                    onSuccess(successArgs)
+                } else {
+                    onFail(failArgs)
+                }
+            })
+            .catch(err => {
+                onFail(failArgs)
+            })
+    }
+
+    // LOGIC FOR MF_LINK SUBMISSION
+    const mfForm = document.querySelector('#mf_form')
+    const mfInput = document.querySelector('#mf_link')
+    const onMfS = (arg) => {
+        const messaegeElem = document.querySelector('#success-message')
+        messaegeElem.textContent = 'Mediafire Link Updated!'
+        setTimeout(() => {
+            messaegeElem.textContent = ''
+        }, 2 * 1000)
+    }
+    const onMfF = (arg) => {
+        const messaegeElem = document.querySelector('#fail-message')
+        messaegeElem.textContent = 'Mediafire Link Updataion Failed!'
+        setTimeout(() => {
+            messaegeElem.textContent = ''
+        }, 2 * 1000)
+    }
+
+    mfForm.addEventListener('submit', e => {
+        e.preventDefault()
+        const link = mfInput.value
+        const dataList = [
+            ['mf_link', link],
+            ['vid', '{{video.id}}'],
+            ['csrfmiddlewaretoken', '{{csrf_token}}']
+        ]
+        const endPoint = "{% url 'kink:update-mf-link' %}"
+        submit(endPoint, dataList, onMfS, onMfF, null, null)
+    })
+
+
+    // LOGIC FOR RAW_LINK SUBMISSION
+    const rawForm = document.querySelector('#raw_form')
+    const rawInput = document.querySelector('#raw_link')
+    const onRawS = (link) => {
+        const messaegeElem = document.querySelector('#success-message')
+        messaegeElem.textContent = 'Data Link Updated!'
+        setTimeout(() => {
+            messaegeElem.textContent = ''
+        }, 2 * 1000)
+        document.querySelector('video').setAttribute('src', link)
+    }
+    const onRawF = (arg) => {
+        const messaegeElem = document.querySelector('#fail-message')
+        messaegeElem.textContent = 'Data Link Updataion Failed!'
+        setTimeout(() => {
+            messaegeElem.textContent = ''
+        }, 2 * 1000)
+    }
+
+    rawForm.addEventListener('submit', e => {
+        e.preventDefault()
+        const link = rawInput.value
+        const dataList = [
+            ['raw_link', link],
+            ['vid', '{{video.id}}'],
+            ['csrfmiddlewaretoken', '{{csrf_token}}']
+        ]
+        const endPoint = "{% url 'kink:update-raw-link' %}"
+        submit(endPoint, dataList, onRawS, onRawF, link, null)
+    })
+
+    // LOGIC FOR ADDING BOOKMARKS 
+    const bkMrkAdFrm = document.querySelector('#bookmark-add-from')
+    const bkMrkTxt = document.querySelector('#bookmark-notes')
+    const currentTimeStamp = document.querySelector('#current-time')
+    const bkMrkAS = () => {
+        axios.get(`{% url 'kink:bookmark-list' video.id %}`)
+            .then(res => {
+                const list = document.querySelector('#bookmark-list')
+                list.innerHTML = ''
+                let listContent = ''
+                if (res.data.length > 0) {
+                    res.data.forEach(item => {
+                        console.log(item.fields.text)
+                        const time = `${parseInt(+item.fields.time / 60)}:${parseInt(+item.fields.time % 60)}`
+                        listContent = listContent +
+                            `
+                    <div class="row border-bottom py-1 bookmark-item">
+                    <div class="col-3 lead text-center border-end d-flex align-items-center justify-content-center time-stamps">
+                        
+                        <span class="time-stamps-text">${time}</span>
+                        </div>
+                    <div class="col-9 lead">
+                        ${item.fields.text}
+                        &nbsp;
+                        <a href="/admin/kink/bookmark/${item.fields.id}/change/" target="_blank"><i class="fa fa-pencil text-danger edit-bookmark-btn" aria-hidden="true"></i></a>
+                        </div>
+                        </div>
+                        `
+                    })
+                    list.innerHTML = listContent
+                } else {
+                    listContent.innerHTML = `<p class="lead">No bookmarks available for this video</p>`
+                }
+            })
+            .catch(err => console.error(err))
+    }
+    const bkMrkAF = () => {
+        console.log('Some error occured. Book mark can not be added')
+    }
+    setInterval(() => {
+        const time = parseInt(document.querySelector('video').currentTime)
+        const timeTxt = `${parseInt(time / 60)}:${Math.round(time % 60 * 100) / 100}`
+        currentTimeStamp.textContent = timeTxt
+    }, 1 * 1000)
+    bkMrkAdFrm.addEventListener('submit', e => {
+        e.preventDefault()
+        const text = bkMrkTxt.value
+        const time = parseInt(document.querySelector('video').currentTime)
+        const timeTxt = `${parseInt(time / 60)}:${Math.round(time % 60 * 100) / 100}`
+
+        const dataList = [
+            ['vid', '{{video.id}}'],
+            ['btext', text],
+            ['btime', parseInt(document.querySelector('video').currentTime)],
+            ['csrfmiddlewaretoken', '{{csrf_token}}']
+        ]
+        bkMrkTxt.value = ''
+        const endPoint = "{% url 'kink:update-raw-link' %}"
+        submit(endPoint, dataList, bkMrkAS, bkMrkAF, null, null)
+    })
+
+
+    // LOGIC FOR UPDATE LAST SEEN
+    let updtLastSn = false;
+    var url_string = window.location.href
+    var url = new URL(url_string);
+    var goto = url.searchParams.get("goto");
+    if(goto){
+        document.querySelector('video').currentTime = goto
+    } else {
+        document.querySelector('video').currentTime = {{ video.last_seen }}
+    }
+    let switchInput = document.querySelector('#update-last-seen')
+    const lsSI = document.querySelector('#last-seen-update')
+
+    const onLSSucc = () => {
+        lsSI.classList.add('text-success')
+        setTimeout(() => {
+            lsSI.classList.remove('text-success')
+        }, 2 * 1000)
+    }
+    const onLSFail = () => {
+        lsSI.classList.add('text-danger')
+        setTimeout(() => {
+            lsSI.classList.remove('text-danger')
+        }, 2 * 1000)
+    }
+    setTimeout(() => {
+        switchInput.disabled = false
+        setInterval(() => {
+            const currentTime = document.querySelector('video').currentTime
+            if (switchInput.checked) {
+                const dataList = [
+                    ['vid', '{{video.id}}'],
+                    ['last_seen', document.querySelector('video').currentTime],
+                    ['csrfmiddlewaretoken', '{{csrf_token}}']
+                ]
+                const endPoint = '{% url "kink:last-seen" %}'
+
+                submit(endPoint, dataList, onLSSucc, onLSFail, null, null)
+            }
+        }, 10 * 1000)
+    }, 60 * 1000)
+
+    const goToTimeStamp = (time) => {
+        document.querySelector('video').currentTime = time
+    }
+    let bmrkList = document.querySelector('#bookmark-list')
+    bmrkList.addEventListener('click', e => {
+        if (e.target.classList.contains('time-stamps-text')) {
+            let minute_second = e.target.textContent.trim().split(':')
+            let minute = minute_second[0]
+            let second = minute_second[1]
+            minute = parseInt(minute)
+            second = parseInt(second)
+            document.querySelector('video').currentTime = minute * 60 + second
+        }
+    })
+
+</script>
+
+{% endblock page_script %}

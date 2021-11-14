@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block page_title %}Kink | All Videos{% endblock page_title %}
+
+
+{% block page_content %}
+
+<div class="container mb-5">
+    <div class="mb-3">
+        <a href="{% url 'kink:video-page' last_seen_video.id %}" class="btn btn-lg btn-danger">Continue Watching</a> <span class="lead">{{last_seen_video.title}}</span>
+    </div>
+    <div class="accordion accordion-flush" id="all-videos-accordion">
+        {% for video in videos %}
+            {% include 'kink/includes/accordion-item.html' with video=video last_seen_video=last_seen_video %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock page_content %}

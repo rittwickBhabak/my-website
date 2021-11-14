@@ -1,0 +1,30 @@
+{% load custom_tags %}
+<div class="accordion-item">
+<h2 class="accordion-header" id="accordion-all-videos-heading-{{forloop.counter}}">
+    <div class="accordion-button collapsed bg-dark text-white">
+    {% if video.id == last_seen_video.id %}
+    <i class="fa fa-play text-danger" aria-hidden="true"></i> &nbsp;&nbsp;
+    {% else %}
+    <i class="fa fa-play" aria-hidden="true"></i> &nbsp;&nbsp;
+    {% endif %}
+    {{video.title}} &nbsp;&nbsp; 
+    <a href="{% url 'kink:video-page' video.id %}" class="btn btn-danger p-1 btn-sm ml-4 d-inline">Watch Now</a>
+    &nbsp; &nbsp;
+    <button class="btn btn-sm btn-danger p-1" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-all-videos-collapse-{{forloop.counter}}" aria-expanded="false" aria-controls="accordion-all-videos-collapse-{{forloop.counter}}">Bookmarks</button>
+    </div>
+</h2>
+<div id="accordion-all-videos-collapse-{{forloop.counter}}" class="accordion-collapse collapse" aria-labelledby="accordion-all-videos-heading-{{forloop.counter}}" data-bs-parent="#all-videos-accordion">
+    <div class="accordion-body bg-dark text-white px-5">
+    {% for bookmark in video.bookmark_set.all|order_bkmrks_rev %}
+        <div class="row border-bottom">
+            <div class="col-1 text-center border-end">
+                <a href="{% url 'kink:video-page' bookmark.video.id %}?goto={{bookmark.time}}" target="_blank" style="text-decoration: none;">{{bookmark.time|format_time}}</a>
+            </div>
+            <div class="col-11">{{bookmark.text}}</div>
+        </div>
+    {% empty %}
+        <p class="lead">No bookmarks available for this video</p>
+    {% endfor %}
+    </div>
+</div>
+</div>

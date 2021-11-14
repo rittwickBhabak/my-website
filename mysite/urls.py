@@ -10,6 +10,7 @@ urlpatterns = [
     path('tech-blog/', include('tech_blog.urls')),
     path('choti-golpo/', include('choti_golpo.urls')),
     path('library/', include('library.urls')),
+    path('kink/', include('kink.urls')),
     path('logout/', views.logout_view, name='logout'),
     path('login/', views.login_view, name='login'),
     # path('users/', include('app_users.urls')),

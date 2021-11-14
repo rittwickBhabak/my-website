@@ -6,11 +6,75 @@
 
 {% block page_content %}
 <div class="container my-3 mb-5">
-    <p class="px-0">
-        <a class="btn btn-primary" href="{% url 'restaurants:add-restaurant' %}">Add New Restaurant</a><br><br>
-        <a href="{% url 'choti_golpo:talk-list' %}" class="btn btn-primary">Dirty Talk List</a><br><br>
-        <a href="{% url 'library:list' %}" class="btn btn-primary">Go To Library</a><br><br>
-    </p>
+    <div class="row mb-3">
+        <div class="col-lg-3 col-12 mb-3">
+            <div class="card" style="width: 18rem;">
+                <img src="https://source.unsplash.com/1600x900/?restaurant" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Restaurants <i class="fa fa-cutlery" aria-hidden="true"></i></h5>
+                    <p class="card-text">This is my collection of restaurants.</p>
+                    <a href="{% url 'restaurants:restaurant-list' %}" class="btn btn-primary">All Restaurant</a>
+                    <a href="{% url 'restaurants:add-restaurant' %}" class="btn btn-primary">Add New</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-12 mb-3">
+            <div class="card" style="width: 18rem;">
+                <img src="https://source.unsplash.com/1600x900/?book,library" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Library <i class="fa fa-book" aria-hidden="true"></i></h5>
+                    <p class="card-text">My e-book library</p>
+                    <a href="{% url 'library:list' %}" class="btn btn-primary">Book List</a>
+                    <a href="#" class="btn btn-primary">Read Book</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-12 mb-3">
+            <div class="card" style="width: 18rem;">
+                <img src="https://source.unsplash.com/1600x900/?sensual" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Sex Stories <i class="fa fa-heart" aria-hidden="true"></i></h5>
+                    <p class="card-text">Learn dirty talk in bengali.</p>
+                    <a href="{% url 'choti_golpo:index' %}" class="btn btn-primary">Sex Stories</a>
+                    <a href="{% url 'choti_golpo:talk-list' %}" class="btn btn-primary">Dirty Talk</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-12 mb-3">
+            <div class="card" style="width: 18rem;">
+                <img src="https://source.unsplash.com/1600x900/?programming" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Tech Blog <i class="fa fa-code" aria-hidden="true"></i></h5>
+                    <p class="card-text">This is my tech blog.</p>
+                    <a href="{% url 'tech_blog:post-list' %}" class="btn btn-primary">All Posts</a>
+                    <a href="{% url 'tech_blog:post-add' %}" class="btn btn-primary">Add New Post</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-lg-3 col-12 mb-3">
+            <div class="card" style="width: 18rem;">
+                <img src="https://source.unsplash.com/1600x900/?english-grammar" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">English Grammar</h5>
+                    <p class="card-text">Learn English Grammar daily and add questions</p>
+                    <a href="{% url 'english_grammar:chapter-list' %}" class="btn btn-primary">Chapter List</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-12 mb-3">
+            <div class="card" style="width: 18rem;">
+                <img src="https://source.unsplash.com/1600x900/?sensual,sex" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Kink University <i class="fa fa-heart" aria-hidden="true"></i></h5>
+                    <p class="card-text">Learn BDSM from Kink University daily 5 minutes</p>
+                    <a href="{% url 'kink:home-page' %}" class="btn btn-primary">All Videos</a>
+                    <a href="" class="btn btn-primary">Current Video</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock page_content %}

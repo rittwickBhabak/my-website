@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'tech_blog',
     'choti_golpo',
     'library',
+    'kink',
     'app_users',
 ]
 
